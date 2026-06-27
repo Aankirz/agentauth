@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentAuth — OAuth for your AI agent</title>
+  <meta name="description" content="Scoped, revocable, short-lived delegation tokens for AI agents and MCP servers. Let an agent act on a user's behalf without handing it a master key." />
+  <meta property="og:title" content="AgentAuth — OAuth for your AI agent" />
+  <meta property="og:description" content="Scoped, revocable, short-lived delegation tokens for AI agents and MCP servers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#top"><span class="dot"></span>AgentAuth</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#how">How it works</a>
+        <a href="#start">Quickstart</a>
+        <a href="#features">Features</a>
+        <a class="nav-cta" href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GitHub ★</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow"><span class="pulse"></span>open source · MIT · zero-dependency core</span>
+          <h1>OAuth for your <span class="grad">AI agent</span>.</h1>
+          <p class="lede">Let an agent act on a user's behalf with <b>scoped</b>, <b>revocable</b>, <b>short-lived</b> tokens — never a full-access master key.</p>
+          <div class="chips">
+            <span class="chip"><b>issue</b> · verify · revoke</span>
+            <span class="chip">15-min TTL by default</span>
+            <span class="chip">MCP-ready</span>
+          </div>
+          <div class="cta-row">
+            <button class="btn btn-primary" data-copy="npm install agentauth">npm install agentauth</button>
+            <a class="btn btn-ghost" href="#start">Read the quickstart →</a>
+          </div>
+        </div>
+
+        <div class="code-card reveal">
+          <div class="code-head">
+            <span class="lights"><i></i><i></i><i></i></span>
+            <span class="file">server.ts</span>
+            <button class="copy code-head-copy" data-copy-target="hero-snippet">copy</button>
+          </div>
+<pre><code id="hero-snippet"><span class="tok-key">import</span> { AgentAuth } <span class="tok-key">from</span> <span class="tok-str">'agentauth'</span>
+
+<span class="tok-key">const</span> auth = <span class="tok-key">new</span> <span class="tok-fn">AgentAuth</span>({ secret: process.env.<span class="tok-num">SECRET</span> })
+
+<span class="tok-com">// user authorizes an agent for one scope</span>
+<span class="tok-key">const</span> { token } = <span class="tok-key">await</span> auth.<span class="tok-fn">issue</span>({
+  subject: <span class="tok-str">'user_123'</span>,
+  agent:   <span class="tok-str">'research-bot'</span>,
+  scopes:  [<span class="tok-str">'email:read'</span>],
+})
+
+<span class="tok-com">// your API enforces it in one call</span>
+<span class="tok-key">await</span> auth.<span class="tok-fn">verify</span>(token, { requiredScopes: [<span class="tok-str">'email:read'</span>] })
+</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">The model</span>
+          <h2>A grant becomes a token. The token is all the agent ever holds.</h2>
+          <p>Four moving parts. The user grants, AgentAuth mints, your server verifies, anyone can revoke.</p>
+        </div>
+        <div class="flow">
+          <div class="flow-step reveal"><div class="n">01 · grant</div><h3>User consents</h3><p>Approves an agent for specific <code>scopes</code> with a short TTL.</p></div>
+          <div class="flow-step reveal"><div class="n">02 · issue</div><h3>Mint a token</h3><p><code>auth.issue()</code> returns a signed, short-lived JWT.</p></div>
+          <div class="flow-step reveal"><div class="n">03 · verify</div><h3>Server enforces</h3><p><code>auth.verify()</code> checks signature, expiry, scopes.</p></div>
+          <div class="flow-step reveal"><div class="n">04 · revoke</div><h3>Cut it off</h3><p><code>auth.revoke()</code> by token, agent, or user.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICKSTART / TUTORIAL -->
+    <section id="start">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Quickstart</span>
+          <h2>From zero to a scoped token in under a minute.</h2>
+          <p>Copy each block in order. No accounts, no dashboard, no service to run — it's a library.</p>
+        </div>
+
+        <div class="tut">
+          <aside class="tut-steps reveal">
+            <div class="tut-step"><div class="badge">1</div><div><h3>Install</h3><p>Node 18+. The core has one dependency (<code>jose</code>).</p></div></div>
+            <div class="tut-step"><div class="badge">2</div><div><h3>Configure once</h3><p>A ≥32-byte secret, server-side only. Set issuer & audience.</p></div></div>
+            <div class="tut-step"><div class="badge">3</div><div><h3>Issue from a grant</h3><p>After the user consents, mint a scoped token for the agent.</p></div></div>
+            <div class="tut-step"><div class="badge">4</div><div><h3>Verify on your API</h3><p>Gate each route by the scopes it needs. Throws typed errors.</p></div></div>
+            <div class="tut-step"><div class="badge">5</div><div><h3>Revoke anytime</h3><p>By token, or "disconnect this agent" for every token it holds.</p></div></div>
+          </aside>
+
+          <div class="tut-code reveal">
+            <p class="tut-label"># 1 — install</p>
+            <div class="code-card">
+              <div class="code-head"><span class="file">terminal</span><button class="copy" data-copy-target="t1">copy</button></div>
+<pre><code id="t1">npm install agentauth
+<span class="tok-com"># generate a secret:</span> node -e <span class="tok-str">"console.log(crypto.randomUUID()+crypto.randomUUID())"</span></code></pre>
+            </div>
+
+            <p class="tut-label"># 2 — configure (once, server-side)</p>
+            <div class="code-card">
+              <div class="code-head"><span class="file">auth.ts</span><button class="copy" data-copy-target="t2">copy</button></div>
+<pre><code id="t2"><span class="tok-key">import</span> { AgentAuth } <span class="tok-key">from</span> <span class="tok-str">'agentauth'</span>
+
+<span class="tok-key">export const</span> auth = <span class="tok-key">new</span> <span class="tok-fn">AgentAuth</span>({
+  secret:   process.env.<span class="tok-num">AGENTAUTH_SECRET</span>!,  <span class="tok-com">// >= 32 bytes</span>
+  issuer:   <span class="tok-str">'my-app'</span>,
+  audience: <span class="tok-str">'my-api'</span>,
+})</code></pre>
+            </div>
+
+            <p class="tut-label"># 3 — issue a token after consent</p>
+            <div class="code-card">
+              <div class="code-head"><span class="file">grant.ts</span><button class="copy" data-copy-target="t3">copy</button></div>
+<pre><code id="t3"><span class="tok-key">const</span> { token, expiresAt } = <span class="tok-key">await</span> auth.<span class="tok-fn">issue</span>({
+  subject: <span class="tok-str">'user_123'</span>,            <span class="tok-com">// the human</span>
+  agent:   <span class="tok-str">'research-bot'</span>,         <span class="tok-com">// the agent</span>
+  scopes:  [<span class="tok-str">'email:read'</span>, <span class="tok-str">'calendar:read'</span>],
+  ttlSeconds: <span class="tok-num">600</span>,                 <span class="tok-com">// optional, 15 min default</span>
+})
+<span class="tok-com">// hand `token` to the agent</span></code></pre>
+            </div>
+
+            <p class="tut-label"># 4 — verify on every protected route</p>
+            <div class="code-card">
+              <div class="code-head"><span class="file">route.ts</span><button class="copy" data-copy-target="t4">copy</button></div>
+<pre><code id="t4"><span class="tok-key">import</span> { MissingScopeError } <span class="tok-key">from</span> <span class="tok-str">'agentauth'</span>
+
+<span class="tok-key">try</span> {
+  <span class="tok-key">const</span> claims = <span class="tok-key">await</span> auth.<span class="tok-fn">verify</span>(token, {
+    requiredScopes: [<span class="tok-str">'email:read'</span>],
+  })
+  <span class="tok-com">// claims.sub, claims.agent, claims.scopes</span>
+} <span class="tok-key">catch</span> (err) {
+  <span class="tok-key">if</span> (err <span class="tok-key">instanceof</span> MissingScopeError) <span class="tok-fn">deny</span>(<span class="tok-num">403</span>)
+}</code></pre>
+            </div>
+
+            <p class="tut-label"># 5 — revoke</p>
+            <div class="code-card">
+              <div class="code-head"><span class="file">revoke.ts</span><button class="copy" data-copy-target="t5">copy</button></div>
+<pre><code id="t5"><span class="tok-key">await</span> auth.<span class="tok-fn">revoke</span>(token)                       <span class="tok-com">// one token</span>
+<span class="tok-key">await</span> auth.<span class="tok-fn">revoke</span>({ agent: <span class="tok-str">'research-bot'</span> })   <span class="tok-com">// disconnect agent</span>
+<span class="tok-key">await</span> auth.<span class="tok-fn">revoke</span>({ subject: <span class="tok-str">'user_123'</span> })    <span class="tok-com">// every token for a user</span></code></pre>
+            </div>
+
+            <div class="callout">
+              <b>That's the whole API.</b> For production: swap the in-memory revocation store for Redis via the <code>RevocationStore</code> interface, add an <code>onEvent</code> hook for audit, and set a <code>kid</code> for key rotation. All in the <a href="https://github.com/Aankirz/agentauth#readme" target="_blank" rel="noopener" style="color:var(--accent)">README</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Why not just an API key</span>
+          <h2>Because a key can't be scoped, revoked, or expired.</h2>
+        </div>
+        <div class="bento">
+          <div class="feat span-2 reveal">
+            <div class="ic">// scoped</div>
+            <h3>Least privilege, enforced</h3>
+            <p>Every token carries explicit scopes. <code>verify</code> rejects anything beyond them, with wildcard support (<code>email:*</code>) for grouping. The agent only ever sees what the user approved.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="ic">// short-lived</div>
+            <h3>Small blast radius</h3>
+            <p>15-minute TTL by default. A leaked token is worthless in minutes.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="ic">// revocable</div>
+            <h3>Kill switch</h3>
+            <p>Revoke a token, or every token an agent or user holds, in one call.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="ic">// stateless</div>
+            <h3>No DB round-trip</h3>
+            <p>Signed JWTs verify locally. Opt into revocation checks only where you need them.</p>
+          </div>
+          <div class="feat reveal">
+            <div class="ic">// auditable</div>
+            <h3>Every event, hooked</h3>
+            <p>Structured <code>issued / verified / denied / revoked</code> events for your audit trail.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>AgentAuth · MIT · built for the agent era</span>
+      <span class="links">
+        <a href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/Aankirz/agentauth#readme" target="_blank" rel="noopener">Docs</a>
+        <a href="https://www.npmjs.com/package/agentauth" target="_blank" rel="noopener">npm</a>
+      </span>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
