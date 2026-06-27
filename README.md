@@ -2,7 +2,7 @@
 
 **OAuth-style delegated authorization for AI agents and MCP servers.**
 
-🌐 **[Landing page & quickstart →](https://aankirz.github.io/agentauth/)** · [Live demo](https://aankirz.github.io/agentauth/demo/) · [Tutorial](./docs/TUTORIAL.md)
+🌐 **[Website →](https://agentauth-site.vercel.app)** · [Live demo](https://agentauth-site.vercel.app/demo) · [Tutorial](./docs/TUTORIAL.md)
 
 Agents (ChatGPT, Claude, Gemini, Grok, your own) increasingly act *on behalf of a user* — reading email, calling internal APIs, hitting MCP tools. Handing them a full-access API key is the wrong default: it can't be scoped, can't be revoked, and never expires.
 
