@@ -1,6 +1,6 @@
 {
   "name": "agentauth",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "OAuth-style delegated authorization for AI agents and MCP servers — issue scoped, revocable, short-lived tokens so an agent can act on a user's behalf without full-access keys.",
   "type": "module",
   "main": "./dist/index.js",

@@ -39,18 +39,48 @@ const { token } = await auth.issue({
 const claims = await auth.verify(token, { requiredScopes: ['email:read'] });
 //    claims.sub === 'user_123', claims.scopes === ['email:read','calendar:read']
 
-// 3. Revoke any time (kills the grant before it expires).
-await auth.revoke(token); // or auth.revoke(jti)
+// 3. Revoke any time. By token, bare jti, or criteria.
+await auth.revoke(token);                 // one token
+await auth.revoke({ agent: 'agent_research_bot' }); // "disconnect this agent"
+await auth.revoke({ subject: 'user_123' });         // every token for a user
+```
+
+## Config
+
+```ts
+new AgentAuth({
+  secret,                      // required, >= 32 bytes
+  issuer: 'my-app',
+  audience: 'my-api',
+  defaultTtlSeconds: 900,      // 15 min default
+  kid: 'k1',                   // stamped in the token header for key rotation
+  clockToleranceSeconds: 30,   // skew allowed on verify
+  checkRevocation: true,       // set false for a stateless verify fast path
+  store: new MemoryStore(),    // swap for Redis/DB
+  onEvent: (e) => log(e),      // 'issued' | 'verified' | 'denied' | 'revoked'
+});
 ```
 
 ## API
 
 | Method | Purpose |
 |---|---|
-| `new AgentAuth(config)` | Configure signing secret, issuer, audience, default TTL, revocation store. |
+| `new AgentAuth(config)` | Configure signing, TTL, rotation, revocation, audit hook. |
 | `issue(grant)` | Mint a token from `{ subject, agent, scopes, ttlSeconds? }`. Returns `{ token, jti, expiresAt }`. |
-| `verify(token, { requiredScopes? })` | Validate signature, expiry, audience, revocation, and scopes. Returns `AgentClaims` or throws. |
-| `revoke(jtiOrToken)` | Revoke a token until its natural expiry. |
+| `verify(token, { requiredScopes?, checkRevocation? })` | Validate signature, expiry, audience, scopes, and (optionally) revocation. Returns `AgentClaims` or throws a typed error. |
+| `revoke(tokenOrJtiOrCriteria)` | Revoke by token string, bare jti, or `{ jti?, agent?, subject? }`. |
+
+### Scopes
+
+Compared by equality, plus wildcards: a granted `email:*` satisfies a required `email:read`, and `*` satisfies anything. Blank scopes are rejected at `issue`.
+
+### Errors
+
+`verify`/`issue` throw typed errors extending `AgentAuthError`, each with a stable `.code`: `TokenInvalidError`, `TokenExpiredError`, `RevokedError`, `MissingScopeError` (carries `.missing` for server-side logging — its message is intentionally generic so an agent can't read off scopes to escalate to), `InvalidGrantError`, `InvalidConfigError`.
+
+### Revocation lifetime
+
+`revoke(token)` keys the entry to the token's own expiry. Revoking by bare jti or criteria keys it to the longest TTL this instance has issued, so it reliably outlives any token it minted. With the default in-memory store this is per-process — use a shared `RevocationStore` for multi-process setups.
 
 ### Revocation stores
 
