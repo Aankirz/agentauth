@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentAuth — playground (runs in your browser)</title>
+  <meta name="description" content="Interactive AgentAuth playground. Issue, verify, and revoke real HS256 delegation tokens for AI agents — entirely client-side. The real auth logic, in your browser." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="./demo.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="../index.html"><span class="mark" data-dog="2" data-cls="mark"></span>AGENTAUTH</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="../index.html">← back to AgentAuth</a>
+        <a class="nav-cta" href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GITHUB ★</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="play-intro">
+      <span class="badge-tag">◆ LIVE PLAYGROUND · NO BACKEND</span>
+      <h1>The <span class="hl">control panel</span>.</h1>
+      <p class="lede">This runs entirely in your browser. View source, it's the real thing: HS256 JWTs via <code>jose</code>, the real scope matcher, the real typed errors.</p>
+    </section>
+
+    <div class="demo-layout">
+      <!-- ============ CONTROLS ============ -->
+      <div class="demo-controls">
+
+        <!-- GRANT -->
+        <section class="panel" aria-labelledby="grant-h">
+          <h2 id="grant-h" class="panel-h"><span class="step-n">1</span> Grant</h2>
+          <p class="panel-sub">Pick what the user delegates to the agent.</p>
+
+          <fieldset class="scope-set">
+            <legend>Scopes</legend>
+            <label class="chk"><input type="checkbox" name="grant-scope" value="email:read" checked /> <code>email:read</code></label>
+            <label class="chk"><input type="checkbox" name="grant-scope" value="email:write" /> <code>email:write</code></label>
+            <label class="chk"><input type="checkbox" name="grant-scope" value="calendar:read" checked /> <code>calendar:read</code></label>
+            <label class="chk"><input type="checkbox" name="grant-scope" value="files:read" /> <code>files:read</code></label>
+          </fieldset>
+
+          <div class="field-row">
+            <label class="field">
+              <span>Subject (user)</span>
+              <input id="grant-subject" type="text" value="user_123" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Agent</span>
+              <input id="grant-agent" type="text" value="research-bot" autocomplete="off" />
+            </label>
+            <label class="field field-sm">
+              <span>TTL (sec)</span>
+              <input id="grant-ttl" type="number" value="900" min="1" max="86400" />
+            </label>
+          </div>
+
+          <button id="btn-issue" class="btn btn-primary">▸ ISSUE TOKEN</button>
+        </section>
+
+        <!-- TOKEN -->
+        <section class="panel" aria-labelledby="token-h">
+          <h2 id="token-h" class="panel-h"><span class="step-n">2</span> Token</h2>
+          <p class="panel-sub">The minted JWT and its decoded claims.</p>
+
+          <div class="code-card">
+            <div class="code-head">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="file">token.jwt</span>
+              <button class="copy" id="copy-jwt" type="button">copy</button>
+            </div>
+            <pre><code id="jwt-out">— issue a token to begin —</code></pre>
+          </div>
+
+          <div class="code-card claims-card">
+            <div class="code-head">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="file">claims.json</span>
+            </div>
+            <pre><code id="claims-out">{}</code></pre>
+          </div>
+        </section>
+
+        <!-- VERIFY -->
+        <section class="panel" aria-labelledby="verify-h">
+          <h2 id="verify-h" class="panel-h"><span class="step-n">3</span> Verify</h2>
+          <p class="panel-sub">The watchdog checks the badge against required scopes.</p>
+
+          <fieldset class="scope-set">
+            <legend>Required scope(s)</legend>
+            <label class="chk"><input type="checkbox" name="req-scope" value="email:read" checked /> <code>email:read</code></label>
+            <label class="chk"><input type="checkbox" name="req-scope" value="email:write" /> <code>email:write</code></label>
+            <label class="chk"><input type="checkbox" name="req-scope" value="calendar:read" /> <code>calendar:read</code></label>
+            <label class="chk"><input type="checkbox" name="req-scope" value="files:read" /> <code>files:read</code></label>
+            <label class="chk"><input type="checkbox" name="req-scope" value="*" /> <code>*</code> (everything)</label>
+          </fieldset>
+
+          <label class="chk chk-inline">
+            <input type="checkbox" id="check-revocation" checked /> consult revocation list (<code>checkRevocation</code>)
+          </label>
+
+          <button id="btn-verify" class="btn btn-go">▸ VERIFY</button>
+
+          <div id="result" class="result result-idle" role="status" aria-live="polite">
+            <span class="result-badge">IDLE</span>
+            <span class="result-msg">Issue a token, then verify it.</span>
+          </div>
+        </section>
+
+        <!-- REVOKE -->
+        <section class="panel" aria-labelledby="revoke-h">
+          <h2 id="revoke-h" class="panel-h"><span class="step-n">4</span> Revoke</h2>
+          <p class="panel-sub">Call off the dog. Verify with revocation on will then deny.</p>
+          <div class="revoke-row">
+            <button id="btn-revoke-token" class="btn btn-danger" type="button">revoke this token</button>
+            <button id="btn-revoke-agent" class="btn btn-danger" type="button">revoke by agent</button>
+            <button id="btn-revoke-subject" class="btn btn-danger" type="button">revoke by subject</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ SIDE: DOG + LOG ============ -->
+      <aside class="demo-side">
+        <div class="kennel" id="kennel">
+          <span class="bubble" id="dog-bubble">woof. show me your scopes.</span>
+          <span class="dog wag" id="dog" data-dog="9"></span>
+          <p class="dog-name">WATCHDOG</p>
+          <p class="dog-role" id="dog-role">guards the gate · checks every token</p>
+        </div>
+
+        <div class="code-card log-card">
+          <div class="code-head">
+            <span class="lights"><i></i><i></i><i></i></span>
+            <span class="file">events.log</span>
+            <button class="copy" id="clear-log" type="button">clear</button>
+          </div>
+          <pre><code id="event-log" aria-live="polite" aria-label="Event log"><span class="tok-com">// events appear here, newest first</span></code></pre>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>AgentAuth playground · the real auth, client-side</span>
+      <div class="links">
+        <a href="../index.html">HOME</a>
+        <a href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GITHUB</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./demo.js"></script>
+</body>
+</html>

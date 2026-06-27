@@ -3,6 +3,8 @@
 Zero to a working scoped delegation token in five steps. The same flow is on the
 [landing page](https://aankirz.github.io/agentauth/). No service to run — it's a library.
 
+> Want to try before installing? Play with the [live interactive demo](https://aankirz.github.io/agentauth/demo/) right in your browser.
+
 ## 1. Install
 
 ```bash

@@ -20,6 +20,7 @@
         <a href="#how">How it works</a>
         <a href="#start">Quickstart</a>
         <a href="#features">Why</a>
+        <a href="./demo/">Demo</a>
         <a class="nav-cta" href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GITHUB ★</a>
       </nav>
     </div>
@@ -41,6 +42,7 @@
           <div class="cta-row">
             <button class="btn btn-primary" data-copy="npm install agentauth">▸ npm install agentauth</button>
             <a class="btn btn-go" href="#start">Read the quickstart</a>
+            <a class="btn" href="./demo/">▸ try the live demo</a>
           </div>
         </div>
 
@@ -66,6 +68,24 @@
           <div class="flow-step reveal"><div class="n">02 ISSUE</div><h3>Mint a token</h3><p><code>issue()</code> returns a signed, short-lived badge.</p></div>
           <div class="flow-step reveal"><div class="n">03 VERIFY</div><h3>Dog checks it</h3><p><code>verify()</code> sniffs signature, expiry, scopes.</p></div>
           <div class="flow-step reveal"><div class="n">04 REVOKE</div><h3>Call it off</h3><p><code>revoke()</code> by token, agent, or user.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section id="demo">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">LIVE PLAYGROUND</span>
+          <h2>See the watchdog work. In your browser.</h2>
+          <p>No signup, no install. Issue a scoped token, verify it, then call the dog off, all running the real auth client-side.</p>
+        </div>
+        <div class="callout reveal">
+          <span class="pup" data-dog="3"></span>
+          <span><b>Poke the leash and watch it bark.</b> Mint a badge, narrow the scopes, let one expire, hit revoke. It's the same library the docs describe, wired up to play with right now. <a href="./demo/">Open the demo →</a></span>
+        </div>
+        <div class="cta-row reveal">
+          <a class="btn btn-go" href="./demo/">▸ try the live demo</a>
         </div>
       </div>
     </section>
