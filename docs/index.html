@@ -19,19 +19,19 @@
       } catch (e) {}
     })();
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <header class="nav">
     <div class="wrap">
-      <a class="brand" href="#top"><span class="mark" data-dog="2" data-cls="mark"></span>AGENTAUTH</a>
+      <a class="brand" href="#top"><span class="mark paw" data-paw="28" data-paw-color="var(--honey-deep)"></span>AgentAuth</a>
       <nav class="nav-links" aria-label="Main navigation">
         <a href="#how">How it works</a>
         <a href="#start">Quickstart</a>
         <a href="#features">Why</a>
         <a href="./demo/">Demo</a>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">DARK</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">☾</button>
         <a class="nav-cta" href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GITHUB ★</a>
       </nav>
     </div>
@@ -57,12 +57,66 @@
           </div>
         </div>
 
-        <div class="kennel reveal">
-          <span class="paw paws-corner" data-paw="3" data-paw-color="var(--ink-dim)"></span>
-          <span class="bubble">woof. show me your scopes.</span>
-          <span class="dog wag" data-dog="11"></span>
-          <p class="dog-name">WATCHDOG</p>
-          <p class="dog-role">guards the gate · checks every token · never sleeps</p>
+        <div class="hero-art reveal">
+          <svg class="dog-illu" viewBox="0 0 240 264" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Watchdog, the AgentAuth guard dog">
+            <title>Watchdog</title>
+            <defs>
+              <linearGradient id="furGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#EFB457" />
+                <stop offset="1" stop-color="#DB8A28" />
+              </linearGradient>
+            </defs>
+            <g id="dog-bob">
+              <!-- tail -->
+              <g id="dog-tail">
+                <path d="M168 206 C148 210 150 168 176 150 C198 134 208 152 197 170 C190 182 188 198 178 208 Z" fill="#CE8327" />
+              </g>
+              <!-- body -->
+              <path d="M120 120 C170 120 180 172 171 207 C166 230 142 240 120 240 C98 240 74 230 69 207 C60 172 70 120 120 120 Z" fill="url(#furGrad)" />
+              <!-- chest blaze -->
+              <path d="M120 150 C138 150 147 182 140 207 C136 224 124 232 120 232 C116 232 104 224 100 207 C93 182 102 150 120 150 Z" fill="#FBE9CC" />
+              <!-- front legs + paws -->
+              <rect x="95" y="196" width="20" height="44" rx="10" fill="url(#furGrad)" />
+              <rect x="125" y="196" width="20" height="44" rx="10" fill="url(#furGrad)" />
+              <ellipse cx="105" cy="237" rx="12" ry="7" fill="#FBE9CC" />
+              <ellipse cx="135" cy="237" rx="12" ry="7" fill="#FBE9CC" />
+              <!-- head -->
+              <g id="dog-head">
+                <!-- ears -->
+                <g class="dog-ear-l">
+                  <path d="M72 54 C58 30 66 18 80 30 C92 40 97 56 96 68 C84 66 78 62 72 54 Z" fill="#CE8327" />
+                  <path d="M78 52 C70 38 74 32 81 40 C87 47 89 56 89 64 C83 62 80 58 78 52 Z" fill="#FBE9CC" />
+                </g>
+                <g class="dog-ear-r">
+                  <path d="M168 54 C182 30 174 18 160 30 C148 40 143 56 144 68 C156 66 162 62 168 54 Z" fill="#CE8327" />
+                  <path d="M162 52 C170 38 166 32 159 40 C153 47 151 56 151 64 C157 62 160 58 162 52 Z" fill="#FBE9CC" />
+                </g>
+                <!-- head shape -->
+                <path d="M120 42 C158 42 179 68 179 100 C179 130 153 148 120 148 C87 148 61 130 61 100 C61 68 82 42 120 42 Z" fill="url(#furGrad)" />
+                <!-- cheeks / muzzle cream -->
+                <path d="M120 98 C151 98 164 112 159 127 C153 143 134 149 120 149 C106 149 87 143 81 127 C76 112 89 98 120 98 Z" fill="#FBE9CC" />
+                <!-- brow spots -->
+                <ellipse cx="98" cy="80" rx="7.5" ry="5" fill="#FBE9CC" />
+                <ellipse cx="142" cy="80" rx="7.5" ry="5" fill="#FBE9CC" />
+                <!-- eyes -->
+                <g class="dog-eye"><ellipse cx="100" cy="94" rx="7" ry="9" fill="#3B3340" /><circle cx="102.4" cy="90.5" r="2.1" fill="#fff" /></g>
+                <g class="dog-eye"><ellipse cx="140" cy="94" rx="7" ry="9" fill="#3B3340" /><circle cx="142.4" cy="90.5" r="2.1" fill="#fff" /></g>
+                <!-- nose + mouth -->
+                <path d="M120 104 C127 104 130 109 127 113 C125 116 120 118 120 118 C120 118 115 116 113 113 C110 109 113 104 120 104 Z" fill="#3B3340" />
+                <path d="M120 118 V124" stroke="#3B3340" stroke-width="2.4" stroke-linecap="round" />
+                <path d="M120 124 C112 132 105 130 101 125" fill="none" stroke="#3B3340" stroke-width="2.4" stroke-linecap="round" />
+                <path d="M120 124 C128 132 135 130 139 125" fill="none" stroke="#3B3340" stroke-width="2.4" stroke-linecap="round" />
+              </g>
+              <!-- collar + security tag (drawn in front) -->
+              <path d="M83 150 Q120 168 157 150 L157 162 Q120 180 83 162 Z" fill="#1FB4A3" />
+              <circle cx="120" cy="169" r="9.5" fill="#F4C44E" />
+              <path d="M120 163 l5 2 v4 q0 4 -5 6 q-5 -2 -5 -6 v-4 z" fill="#3B3340" />
+            </g>
+          </svg>
+          <div class="dog-caption">
+            <p class="nm">Watchdog</p>
+            <p class="rl">checks every badge at the gate</p>
+          </div>
         </div>
       </div>
     </section>
@@ -93,7 +147,7 @@
           <p>No signup, no install. Issue a scoped token, verify it, then call the dog off, all running the real auth client-side.</p>
         </div>
         <div class="callout reveal">
-          <span class="pup" data-dog="3"></span>
+          <span class="pup paw" data-paw="34" data-paw-color="var(--honey-deep)"></span>
           <span><b>Poke the leash and watch it bark.</b> Mint a badge, narrow the scopes, let one expire, hit revoke. It's the same library the docs describe, wired up to play with right now. <a href="./demo/">Open the demo →</a></span>
         </div>
         <div class="cta-row reveal">
@@ -174,7 +228,7 @@
             </div>
 
             <div class="callout">
-              <span class="pup" data-dog="3"></span>
+              <span class="pup paw" data-paw="34" data-paw-color="var(--honey-deep)"></span>
               <span><b>That's the whole API.</b> For production: swap the in-memory store for Redis via <code>RevocationStore</code>, add an <code>onEvent</code> hook for audit, set a <code>kid</code> for key rotation. All in the <a href="https://github.com/Aankirz/agentauth#readme" target="_blank" rel="noopener">README</a>.</span>
             </div>
           </div>
