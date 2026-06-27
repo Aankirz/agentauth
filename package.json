@@ -1,0 +1,28 @@
+{
+  "name": "agentauth",
+  "version": "0.1.0",
+  "description": "OAuth-style delegated authorization for AI agents and MCP servers — issue scoped, revocable, short-lived tokens so an agent can act on a user's behalf without full-access keys.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test dist/test/*.test.js"
+  },
+  "keywords": ["auth", "authorization", "ai", "agents", "mcp", "oauth", "delegation", "llm", "scopes", "jwt"],
+  "license": "MIT",
+  "dependencies": {
+    "jose": "^5.9.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/node": "^22.7.5"
+  }
+}
