@@ -9,7 +9,17 @@
   <meta property="og:description" content="Scoped, revocable, short-lived delegation tokens for AI agents and MCP servers." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+  <script>
+    // set theme before first paint to avoid a flash
+    (function () {
+      try {
+        var t = localStorage.getItem('aa-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -21,6 +31,7 @@
         <a href="#start">Quickstart</a>
         <a href="#features">Why</a>
         <a href="./demo/">Demo</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">DARK</button>
         <a class="nav-cta" href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GITHUB ★</a>
       </nav>
     </div>
@@ -31,7 +42,7 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <span class="badge-tag">◆ OPEN SOURCE · MIT · ZERO-DEP CORE</span>
+          <span class="badge-tag"><span class="paw" data-paw="2" data-paw-color="var(--on-accent)"></span> OPEN SOURCE · MIT · ZERO-DEP CORE</span>
           <h1>The <span class="hl">watchdog</span> for your AI agents.</h1>
           <p class="lede">Every agent shows its badge at the gate. Only the scopes you approved get through, and you can call it off anytime.</p>
           <div class="chips">
@@ -47,6 +58,7 @@
         </div>
 
         <div class="kennel reveal">
+          <span class="paw paws-corner" data-paw="3" data-paw-color="var(--ink-dim)"></span>
           <span class="bubble">woof. show me your scopes.</span>
           <span class="dog wag" data-dog="11"></span>
           <p class="dog-name">WATCHDOG</p>
@@ -59,15 +71,15 @@
     <section id="how">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="kicker">THE MODEL</span>
+          <span class="kicker"><span class="paw" data-paw="2"></span> THE MODEL</span>
           <h2>A grant becomes a token. The token is all the agent ever holds.</h2>
           <p>The user grants. AgentAuth mints. Your server checks the badge. Anyone can call the dog off.</p>
         </div>
         <div class="flow">
-          <div class="flow-step reveal"><div class="n">01 GRANT</div><h3>User consents</h3><p>Approves an agent for specific <code>scopes</code> on a short leash.</p></div>
-          <div class="flow-step reveal"><div class="n">02 ISSUE</div><h3>Mint a token</h3><p><code>issue()</code> returns a signed, short-lived badge.</p></div>
-          <div class="flow-step reveal"><div class="n">03 VERIFY</div><h3>Dog checks it</h3><p><code>verify()</code> sniffs signature, expiry, scopes.</p></div>
-          <div class="flow-step reveal"><div class="n">04 REVOKE</div><h3>Call it off</h3><p><code>revoke()</code> by token, agent, or user.</p></div>
+          <div class="flow-step reveal"><div class="n"><span class="paw" data-paw="2" data-paw-color="var(--green-deep)"></span> 01 GRANT</div><h3>User consents</h3><p>Approves an agent for specific <code>scopes</code> on a short leash.</p></div>
+          <div class="flow-step reveal"><div class="n"><span class="paw" data-paw="2" data-paw-color="var(--green-deep)"></span> 02 ISSUE</div><h3>Mint a token</h3><p><code>issue()</code> returns a signed, short-lived badge.</p></div>
+          <div class="flow-step reveal"><div class="n"><span class="paw" data-paw="2" data-paw-color="var(--green-deep)"></span> 03 VERIFY</div><h3>Dog checks it</h3><p><code>verify()</code> sniffs signature, expiry, scopes.</p></div>
+          <div class="flow-step reveal"><div class="n"><span class="paw" data-paw="2" data-paw-color="var(--green-deep)"></span> 04 REVOKE</div><h3>Call it off</h3><p><code>revoke()</code> by token, agent, or user.</p></div>
         </div>
       </div>
     </section>
@@ -76,7 +88,7 @@
     <section id="demo">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="kicker">LIVE PLAYGROUND</span>
+          <span class="kicker"><span class="paw" data-paw="2"></span> LIVE PLAYGROUND</span>
           <h2>See the watchdog work. In your browser.</h2>
           <p>No signup, no install. Issue a scoped token, verify it, then call the dog off, all running the real auth client-side.</p>
         </div>
@@ -94,7 +106,7 @@
     <section id="start">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="kicker">QUICKSTART</span>
+          <span class="kicker"><span class="paw" data-paw="2"></span> QUICKSTART</span>
           <h2>From zero to a scoped token in under a minute.</h2>
           <p>Copy each block in order. No accounts, no dashboard, no service to run. It's a library.</p>
         </div>
@@ -174,7 +186,7 @@
     <section id="features">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="kicker">WHY NOT JUST AN API KEY</span>
+          <span class="kicker"><span class="paw" data-paw="2"></span> WHY NOT JUST AN API KEY</span>
           <h2>Because a key can't be scoped, revoked, or expired.</h2>
         </div>
         <div class="bento">
@@ -194,7 +206,7 @@
 
   <footer>
     <div class="wrap">
-      <span>AGENTAUTH · MIT · built for the agent era</span>
+      <span><span class="paw" data-paw="2"></span> AGENTAUTH · MIT · built for the agent era</span>
       <span class="links">
         <a href="https://github.com/Aankirz/agentauth" target="_blank" rel="noopener">GITHUB</a>
         <a href="https://github.com/Aankirz/agentauth#readme" target="_blank" rel="noopener">DOCS</a>
