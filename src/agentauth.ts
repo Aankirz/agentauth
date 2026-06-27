@@ -142,9 +142,11 @@ export class AgentAuth {
    * store this is per-process — use a shared RevocationStore for multi-process setups.
    */
   async revoke(target: string | RevocationCriteria): Promise<void> {
+    const now = Math.floor(Date.now() / 1000);
     if (typeof target === 'object') {
-      // No single token exp to key on — keep the entry alive for the longest TTL we've issued.
-      const expiresAt = Math.floor(Date.now() / 1000) + this.maxIssuedTtl;
+      // No single token exp to key on — keep the entry alive for the longest TTL we've issued,
+      // plus clockTolerance so it can't lapse while verify() still accepts a token past its exp.
+      const expiresAt = now + this.maxIssuedTtl + this.clockTolerance;
       await this.store.revoke(target, expiresAt);
       this.emit({ type: 'revoked', agent: target.agent, subject: target.subject, jti: target.jti });
       return;
@@ -152,7 +154,7 @@ export class AgentAuth {
 
     let jti = target;
     // Bare jti: we can't read the token's exp, so bound the entry by the longest TTL issued.
-    let expiresAt = Math.floor(Date.now() / 1000) + this.maxIssuedTtl;
+    let expiresAt = now + this.maxIssuedTtl + this.clockTolerance;
     try {
       const { payload } = await jwtVerify(target, this.key, {
         issuer: this.issuer,
@@ -161,7 +163,8 @@ export class AgentAuth {
         algorithms: ['HS256'],
       });
       jti = String(payload.jti);
-      expiresAt = Number(payload.exp);
+      // Pad by clockTolerance: verify() accepts a token until exp + clockTolerance.
+      expiresAt = Number(payload.exp) + this.clockTolerance;
     } catch {
       // Not a valid token — treat the input as a bare jti.
     }

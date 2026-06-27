@@ -14,7 +14,8 @@
   "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && node --test dist/test/*.test.js"
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "prepublishOnly": "rm -rf dist && tsc -p tsconfig.build.json"
   },
   "keywords": ["auth", "authorization", "ai", "agents", "mcp", "oauth", "delegation", "llm", "scopes", "jwt"],
   "license": "MIT",

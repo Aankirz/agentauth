@@ -88,12 +88,28 @@ Compared by equality, plus wildcards: a granted `email:*` satisfies a required `
 
 Revocation defaults to an in-memory store. For multi-process or persistent revocation, implement `RevocationStore`:
 
+A store revokes by **criteria** (`{ jti?, agent?, subject? }`) and checks each token's claims against them, so "disconnect this agent" works, not just single tokens:
+
 ```ts
-import type { RevocationStore } from 'agentauth';
+import type { RevocationStore, RevocationCriteria, RevocationSubject } from 'agentauth';
 
 class RedisStore implements RevocationStore {
-  async revoke(jti: string, expiresAt: number) { /* SETEX agentauth:revoked:<jti> ... */ }
-  async isRevoked(jti: string) { /* EXISTS ... */ return false; }
+  // Persist each provided field with a TTL until `expiresAt` (unix seconds).
+  async revoke(c: RevocationCriteria, expiresAt: number) {
+    const ttl = expiresAt - Math.floor(Date.now() / 1000);
+    if (c.jti) await redis.set(`revoked:jti:${c.jti}`, '1', 'EXAT', expiresAt);
+    if (c.agent) await redis.set(`revoked:agent:${c.agent}`, '1', 'EX', ttl);
+    if (c.subject) await redis.set(`revoked:subject:${c.subject}`, '1', 'EX', ttl);
+  }
+  // Revoked if ANY of the token's jti / agent / subject is marked.
+  async isRevoked(claims: RevocationSubject) {
+    const hits = await redis.mget(
+      `revoked:jti:${claims.jti}`,
+      `revoked:agent:${claims.agent}`,
+      `revoked:subject:${claims.subject}`,
+    );
+    return hits.some(Boolean);
+  }
 }
 
 const auth = new AgentAuth({ secret, store: new RedisStore() });
